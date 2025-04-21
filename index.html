@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Frame Pack Viewer</title>
+    <script src="./frame_pack.js"></script>
+    <style>
+      body {
+        margin: 0;
+        background-color: #111;
+        color: #fff;
+        font-family: sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      canvas {
+        margin-top: 20px;
+        max-width: 90%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Frame Pack Viewer</h1>
+    <canvas id="canvas"></canvas>
+    <input type="file" id="file" />
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      document.getElementById("file").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function () {
+          const buffer = reader.result;
+          const img = new Image();
+          img.onload = () => {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+          };
+          img.src = URL.createObjectURL(new Blob([buffer]));
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    </script>
+  </body>
+</html>
